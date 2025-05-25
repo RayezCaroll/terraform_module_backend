@@ -1,0 +1,29 @@
+#1. Compress with .tgz format to your local working directory
+ tar -cavf file-writer_0.0.1.tgz /path/to/working_dir/
+
+#2. Upload .tgz file to your GitLab Module using curl command.
+curl --fail-with-body --header "PRIVATE-TOKEN: <your_access_token>" \
+     --upload-file path/to/file.tgz \
+     --url "https://gitlab.example.com/api/v4/projects/<your_project_id>/packages/terraform/modules/<your_module>/<your_system>/0.0.1/file"
+
+where,
+<your_access_token> = project >> setting >> access token >> create new token >> ** api, read_api + high role
+<your_project_id> = project >> 3 dots right top corner >> Copy project id
+<your_module> = Name your module
+<your_system> = Name your provider
+0.0.1 = Version of Module
+
+#3. Using Module 
+# Go to module,
+# Provision instructions
+# Copy and paste into your Terraform configuration, insert the variables, and run Terraform init:
+module "my_module_name" {
+  source = "gitlab.com/initial-group123456/make_file/local"
+  version = "0.0.2"
+}
+
+# Registry setup
+# To authorize access to the Terraform registry:
+credentials "gitlab.com" {
+  token = "<TOKEN>"
+}
