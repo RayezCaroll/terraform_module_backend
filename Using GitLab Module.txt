@@ -1,3 +1,5 @@
+# Using Terraform Module
+
 #1. Compress with .tgz format to your local working directory
  tar -cavf file-writer_0.0.1.tgz /path/to/working_dir/
 
@@ -27,3 +29,18 @@ module "my_module_name" {
 credentials "gitlab.com" {
   token = "<TOKEN>"
 }
+
+# Using GitLab Terraform Backend
+
+export TF_HTTP_USERNAME=<gitlab-name>
+export TF_HTTP_PASSWORD=<Token>
+export TF_STATE_NAME=<name of state file>
+
+terraform init \
+address = "https://gitlab.com/api/v4/projects/<projectid>/terraform/state/$TF_STATE_NAME"
+lock_address = "https://gitlab.com/api/v4/projects/<projectid>/terraform/state/$TF_STATE_NAME/lock"
+unlock_address = "https://gitlab.com/api/v4/projects/<projectid>/terraform/state/$TF_STATE_NAME/lock"
+username = "<gitlab-name"
+lock_method = "POST"
+unlock_method = "DELETE"
+retry_wait_min = 5
